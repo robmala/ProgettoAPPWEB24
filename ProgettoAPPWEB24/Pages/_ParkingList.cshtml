@@ -1,0 +1,16 @@
+﻿@model IEnumerable<ProgettoAPPWEB24.Models.Parcheggio>
+
+@foreach (var p in Model ?? Enumerable.Empty<ProgettoAPPWEB24.Models.Parcheggio>())
+{
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">@p.Nome</h5>
+                <p class="card-text">@p.CAP @p.Citta</p>
+                <p class="card-text">@p.Indirizzo</p>
+                <p class="card-text">@p.Orari</p>
+                <a asp-page="Parcheggio" asp-route-id="@p.Id" class="btn btn-primary">Seleziona</a>
+            </div>
+        </div>
+    </div>
+}

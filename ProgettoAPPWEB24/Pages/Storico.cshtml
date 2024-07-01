@@ -1,0 +1,36 @@
+﻿@page
+@model ProgettoAPPWEB24.Pages.StoricoModel
+@{
+    var storico = Model.Storico;
+}
+
+<div>
+    <center><h1>Storico pagamenti</h1></center>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Utente</th>
+                <th>Parcheggio</th>
+                <th>Data</th>
+                <th>Sosta</th>
+                <th>Costo</th>
+                <th>Ricarica</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in storico!)
+            {
+                <tr>
+                    <td>@p.Id</td>
+                    <td>@p.Utente</td>
+                    <td>@p.Biglietto.ParkId</td>
+                    <td>@p.Biglietto.Ingresso</td>
+                    <td>@p.Uscita</td>
+                    <td>@p.Costo</td>
+                    <td>@p.Biglietto.Ricarica</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

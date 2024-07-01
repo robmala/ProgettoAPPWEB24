@@ -1,0 +1,86 @@
+﻿@page "/{id:int}"
+@using ProgettoAPPWEB24.Areas.Identity.Data
+@model ProgettoAPPWEB24.Pages.ParcheggioModel
+@inject SignInManager<ProgettoAPPWEB24User> SignInManager
+@{
+    var parcheggio = Model.Parcheggio!;
+    var costo = Model.Costo!;
+    var disponibili = Model.Disponibili!;
+}
+<center>
+<h1>
+    @parcheggio.Nome
+</h1>
+<h2>
+    Posti disponibili: @disponibili
+</h2>
+<br />
+<br />
+<div class="container">
+    <div>
+        <div class="col-12 col-lg-8">
+            <div>
+                <center><h3>Costi</h3></center>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Sosta</th>
+                            <th>Ricarica</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var c in costo)
+                        {
+                            <tr>
+                                <td>@c.Sosta</td>
+                                <td>@c.Ricarica</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <h10>I costi sono espressi in €/h per la sosta e €/KWh per la ricarica.</h10><br />
+                <h10>I costi premium sono riservati ai clienti che hanno acquistato un abbonamento.</h10><br />
+                <h10>Il costo totale viene calcolato sommando i prezzi di sosta e ricarica.</h10><br />
+            </div>
+            <br />
+            <br />
+            @if(SignInManager.IsSignedIn(User))
+            {
+                <div>
+                    <center><h3>Seleziona l'operazione da eseguire:</h3></center>
+                    @if(Model.Disponibili > 0)
+                    {
+                        <a asp-page="Sosta" asp-route-id="@parcheggio.Id" class="btn btn-primary">Sosta</a>
+                        <a asp-page="Ricarica" asp-route-id="@parcheggio.Id" class="btn btn-primary">Ricarica</a>
+                    }
+                    else
+                    {
+                        <center><h4>Non ci sono posti disponibili.</h4></center>
+                        <p>Se ha la macchina già in sosta e deve effettuare il pagamento prema il pusante sotto</p>
+                    }
+                    <a asp-page="Pagamento" asp-route-id="@parcheggio.Id" class="btn btn-primary">Pagamento</a>
+                </div>
+
+                var user = SignInManager.UserManager.GetUserAsync(User).Result;
+                if(user!.Role == "Admin")
+                {
+                    <div>
+                        <center><h3>Operazioni riservate agli amministratori:</h3></center>
+                        <a asp-page="Parcheggio/Edit" asp-route-id="@parcheggio.Id" class="btn btn-primary">Modifica</a>
+                        <a asp-page="Parcheggio/Delete" asp-route-id="@parcheggio.Id" class="btn btn-primary">Elimina</a>
+                    </div>
+                }
+            }
+            else
+            {
+                <div>
+                    <center><h4>È necessario effettuare il login per proseguire</h4></center>
+                </div>
+            }       
+            <br />
+            <br />
+        </div>
+    </div>    
+</div>
+
+</center>
