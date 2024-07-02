@@ -1,0 +1,9 @@
+{
+  "Authentication:Google:ClientId": "72519928354-rgl2huiavuscd0btimgur6lpkr72hmtg.apps.googleusercontent.com",
+  "Authentication:Google:ClientSecret": "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",
+
+  "Admin": {
+    "UserName": "admin@admin.com",
+    "Password": "Pa$$w0rd"
+  }
+}
