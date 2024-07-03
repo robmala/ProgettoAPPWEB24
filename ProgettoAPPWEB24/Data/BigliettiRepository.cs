@@ -14,9 +14,9 @@ namespace ProgettoAPPWEB24.Data
             _dataContext = dataContext;
         }
 
-        public async Task<Biglietto> Get(string targa)
+        public async Task<Biglietto> Get(string targa, int id)
         {
-            var biglietto = await _dataContext.Biglietti.FirstOrDefaultAsync(b => b.Targa == targa);
+            var biglietto = await _dataContext.Biglietti.FirstOrDefaultAsync(b => b.Targa == targa && b.IdParcheggio == id );
             return biglietto!;
         }
 

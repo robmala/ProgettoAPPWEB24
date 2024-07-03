@@ -11,8 +11,8 @@ using ProgettoAPPWEB24.Data;
 namespace ProgettoAPPWEB24.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240701153244_modifiche")]
-    partial class modifiche
+    [Migration("20240703140949_BigliettiMods")]
+    partial class BigliettiMods
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -274,15 +274,14 @@ namespace ProgettoAPPWEB24.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("IdParcheggio")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("Ingresso")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("LottoId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("ParkId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Ricarica")
                         .HasColumnType("INTEGER");
@@ -322,12 +321,11 @@ namespace ProgettoAPPWEB24.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsAvailable")
+                    b.Property<int>("IdParcheggio")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ParkId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -340,11 +338,17 @@ namespace ProgettoAPPWEB24.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("BigliettoId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<double>("Costo")
                         .HasColumnType("REAL");
+
+                    b.Property<int>("IdParcheggio")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Ingresso")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Ricarica")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Uscita")
                         .HasColumnType("TEXT");
@@ -354,8 +358,6 @@ namespace ProgettoAPPWEB24.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BigliettoId");
 
                     b.ToTable("Pagamenti");
                 });
@@ -444,17 +446,6 @@ namespace ProgettoAPPWEB24.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ProgettoAPPWEB24.Models.Pagamento", b =>
-                {
-                    b.HasOne("ProgettoAPPWEB24.Models.Biglietto", "Biglietto")
-                        .WithMany()
-                        .HasForeignKey("BigliettoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Biglietto");
                 });
 #pragma warning restore 612, 618
         }

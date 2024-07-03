@@ -1,5 +1,4 @@
-﻿@using ProgettoAPPWEB24.Areas.Identity.Data
-@inject SignInManager<ProgettoAPPWEB24User> SignInManager
+﻿@inject SignInManager<ProgettoAPPWEB24User> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }

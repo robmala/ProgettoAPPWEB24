@@ -1,0 +1,48 @@
+﻿@page "{id:int}/Edit"
+@model ProgettoAPPWEB24.Pages.EditModel
+@{
+    var costo = Model.CostoIniziale!;
+}
+
+<h2>Modifica costi parcheggio</h2>
+<section>
+    <center><h3>Costi attuali</h3></center>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Sosta</th>
+                <th>Ricarica</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in costo)
+            {
+                <tr>
+                    <td>@c.Sosta.ToString("0.00")</td>
+                    <td>@c.Ricarica.ToString("0.00")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
+
+<section>
+	<div>
+        <center><h3>Modifica costi</h3></center>
+		<form method="post">
+			<div class="form-group">
+				<label asp-for="Sosta" class="control-label"></label>
+				<input asp-for="Sosta" class="form-control" />
+				<span asp-validation-for="Sosta" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Ricarica" class="control-label"></label>
+				<input asp-for="Ricarica" class="form-control" />
+				<span asp-validation-for="Ricarica" class="text-danger"></span>
+			</div>
+            <div class="form-group">
+				<input type="submit" value="Salva" class="btn btn-primary" />
+            </div>
+		</form>
+	</div>
+</section>

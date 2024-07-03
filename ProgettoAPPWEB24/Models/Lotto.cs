@@ -7,6 +7,6 @@ namespace ProgettoAPPWEB24.Models
 	{
 		public int Id { get; set; }
 		public bool IsAvailable { get; set; }
-		required public string ParkId { get; set; }
+		required public int IdParcheggio { get; set; }
 	}
 }

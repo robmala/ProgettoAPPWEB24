@@ -32,8 +32,8 @@
                         @foreach (var c in costo)
                         {
                             <tr>
-                                <td>@c.Sosta</td>
-                                <td>@c.Ricarica</td>
+                                <td>@c.Sosta.ToString("0.00")</td>
+                                    <td>@c.Ricarica.ToString("0.00")</td>
                             </tr>
                         }
                     </tbody>
@@ -58,7 +58,7 @@
                         <center><h4>Non ci sono posti disponibili.</h4></center>
                         <p>Se ha la macchina già in sosta e deve effettuare il pagamento prema il pusante sotto</p>
                     }
-                    <a asp-page="Pagamento" asp-route-id="@parcheggio.Id" class="btn btn-primary">Pagamento</a>
+                    <a asp-page="CercaBiglietto" asp-route-id="@parcheggio.Id" class="btn btn-primary">Pagamento</a>
                 </div>
 
                 var user = SignInManager.UserManager.GetUserAsync(User).Result;
@@ -66,8 +66,7 @@
                 {
                     <div>
                         <center><h3>Operazioni riservate agli amministratori:</h3></center>
-                        <a asp-page="Parcheggio/Edit" asp-route-id="@parcheggio.Id" class="btn btn-primary">Modifica</a>
-                        <a asp-page="Parcheggio/Delete" asp-route-id="@parcheggio.Id" class="btn btn-primary">Elimina</a>
+                        <a asp-page="Edit" asp-route-id="@parcheggio.Id" class="btn btn-primary">Modifica</a>
                     </div>
                 }
             }

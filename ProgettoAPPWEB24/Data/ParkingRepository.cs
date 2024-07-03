@@ -13,7 +13,7 @@ namespace ProgettoAPPWEB24.Data
 
         public async Task<int> GetPostiDisponibili(int id)
         {
-            var lotti = await context.Lotti.Where(l => l.ParkId.Equals(id.ToString())).ToListAsync();
+            var lotti = await context.Lotti.Where(l => l.IdParcheggio == id).ToListAsync();
             var disponibili = (
                 from l in lotti
                 where l.IsAvailable
@@ -26,7 +26,7 @@ namespace ProgettoAPPWEB24.Data
         {
             if (await GetPostiDisponibili(id) > 0)
             {
-                var lotti = await context.Lotti.Where(l => l.ParkId == id.ToString()).ToListAsync();
+                var lotti = await context.Lotti.Where(l => l.IdParcheggio == id).ToListAsync();
                 var lotto = lotti.First(l => l.IsAvailable);
                 lotto.IsAvailable = false;
                 await context.SaveChangesAsync();

@@ -2,11 +2,11 @@
 
 namespace ProgettoAPPWEB24.Models
 {
-	public class Costo : IHasId
-	{
-		public int Id { get; set; }
-		public int IdParcheggio { get; set; }
-		public decimal Ricarica { get; set; }
-		public decimal Sosta { get; set; }
-	}
+    public class Costo : IHasId
+    {
+        public int Id { get; set; }
+        public int IdParcheggio { get; set; }
+        public double Ricarica { get; set; }
+        public double Sosta { get; set; }
+    }
 }

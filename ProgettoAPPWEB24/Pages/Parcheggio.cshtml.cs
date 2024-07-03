@@ -11,8 +11,8 @@ namespace ProgettoAPPWEB24.Pages
     {
         private readonly IParkingRepository _parkingRepository;
         private readonly ICostiRepository _costiRepository;
-        public IEnumerable<Costo> Costo { get; set; }
-        public Parcheggio Parcheggio { get; set; }
+        public IEnumerable<Costo>? Costo { get; set; }
+        public Parcheggio? Parcheggio { get; set; }
         public int Disponibili { get; set; }
 
         public ParcheggioModel(IParkingRepository parkingRepository, ICostiRepository costiRepository)
@@ -29,7 +29,7 @@ namespace ProgettoAPPWEB24.Pages
 
             if (Parcheggio == null)
             {
-                return NotFound();
+                return NotFound("Parcheggio non trovato.");
             }
             else
             {

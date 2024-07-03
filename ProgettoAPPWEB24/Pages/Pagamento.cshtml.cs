@@ -8,79 +8,30 @@ namespace ProgettoAPPWEB24.Pages
     public class PagamentoModel : PageModel
     {
         private readonly IBigliettiRepository _bigliettiRepository;
-        private readonly ICostiRepository _costiRepository;
         private readonly IPagamentoRepository _pagamentoRepository;
         private readonly IParkingRepository _parkingRepository;
         private readonly IAutoRepository _autoRepository;
 
         private readonly SignInManager<ProgettoAPPWEB24User> _signinManager;
-        public Parcheggio? Parcheggio { get; set; }
-
-        [BindProperty]
-        required public string Targa { get; set; }
-        public double Totale { get; set; }
+        public Pagamento Pagamento { get; set; } = default!;
         public TimeSpan Durata { get; set; }
-        public Biglietto? Biglietto { get; set; }
-        public string ParkId { get; set; }
-        public Pagamento? Pagamento { get; set; }
 
-        public PagamentoModel(IBigliettiRepository bigliettiRepository, ICostiRepository costiRepository, IPagamentoRepository pagamentoRepository, IHttpContextAccessor httpContextAccessor, SignInManager<ProgettoAPPWEB24User> signInManager, IParkingRepository parkingRepository, IAutoRepository autoRepository)
+        public PagamentoModel(IBigliettiRepository bigliettiRepository, IPagamentoRepository pagamentoRepository, SignInManager<ProgettoAPPWEB24User> signInManager, IParkingRepository parkingRepository, IAutoRepository autoRepository)
         {
             _bigliettiRepository = bigliettiRepository;
-            _costiRepository = costiRepository;
             _pagamentoRepository = pagamentoRepository;
-            _signinManager = signInManager;
-
-            var session = httpContextAccessor.HttpContext?.Session ?? throw new NullReferenceException("Missing Session");
-            var key = nameof(ParkId);
-            ParkId = session.GetString(key) ?? Guid.NewGuid().ToString();
-            session.SetString(key, ParkId);
             _parkingRepository = parkingRepository;
             _autoRepository = autoRepository;
+            _signinManager = signInManager;
         }
 
-        public void OnGet()
-        { }
-
-        public async Task<IActionResult> OnPostCerca(int id)
+        public async Task<IActionResult> OnGetAsync(TimeSpan durata, Biglietto biglietto, double tariffa)
         {
-            if (id == 0)
+
+            if (biglietto == null)
             {
-                return NotFound("Parcheggio non trovato.");
+                return RedirectToPage("Dati mancanti.");
             }
-
-            if (string.IsNullOrEmpty(Targa))
-            {
-                return Page();
-            }
-
-            Parcheggio = await _parkingRepository.Get(id);
-            if (Parcheggio == null)
-            {
-                return NotFound("Parcheggio non trovato.");
-            }
-
-            Biglietto = await _bigliettiRepository.Get(Targa);
-            if (Biglietto == null)
-            {
-                return Page();
-            }
-
-            Durata = DateTime.Now - Biglietto.Ingresso;
-            var costi = await _costiRepository.GetCosto(Parcheggio.Id);
-            
-            foreach (var c in costi)
-            {
-                Totale = Biglietto.Ricarica ? (double)((c.Ricarica + c.Sosta) * (decimal)Durata.TotalHours) : (double)(c.Sosta * (decimal)Durata.TotalHours);
-            }
-
-            Totale = Math.Round(Totale);
-
-            return Page();
-        }
-
-        public async Task<IActionResult> OnPostPaga()
-        {
 
             var user = await _signinManager.UserManager.GetUserAsync(User);
             if (user == null)
@@ -88,19 +39,23 @@ namespace ProgettoAPPWEB24.Pages
                 return NotFound("Utente non trovato.");
             }
 
+            Durata = durata;
+
             Pagamento = new Pagamento
             {
-                Utente = user.Id,
-                Biglietto = Biglietto!,
-                Costo = Totale,
-                Uscita = DateTime.Now
+                Utente = user.Email!,
+                IdParcheggio = biglietto.IdParcheggio,
+                Ingresso = biglietto.Ingresso,
+                Uscita = DateTime.Now,
+                Costo = tariffa,
+                Ricarica = biglietto.Ricarica
             };
 
             await _pagamentoRepository.AddPagamento(Pagamento!);
 
-            await _parkingRepository.LiberaPosto(Biglietto!.LottoId);
-            await _autoRepository.DeleteAuto(Biglietto.Targa);
-            await _bigliettiRepository.Delete(Biglietto.Id);
+            await _parkingRepository.LiberaPosto(biglietto!.LottoId);
+            await _autoRepository.DeleteAuto(biglietto.Targa);
+            await _bigliettiRepository.Delete(biglietto.Id);
 
             return RedirectToPage("_PagamentoSuccess");
         }

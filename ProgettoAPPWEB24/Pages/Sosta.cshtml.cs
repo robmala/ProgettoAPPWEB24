@@ -15,21 +15,16 @@ namespace ProgettoAPPWEB24.Pages
 
         [BindProperty]
         required public Auto InputModel { get; set; }
-        public Biglietto? Biglietto { get; set; }
-        public string ParkId { get; set; }
-        public Parcheggio? Parcheggio { get; set; }
+        public Biglietto Biglietto { get; set; } = default!;
+        //public Parcheggio Parcheggio { get; set; } = default!;
 
-        public SostaModel(IAutoRepository autoRepository, UserManager<ProgettoAPPWEB24User> userManager, IParkingRepository parkingRepository, IHttpContextAccessor httpContextAccessor, IBigliettiRepository bigliettiRepository)
+        public SostaModel(IAutoRepository autoRepository, UserManager<ProgettoAPPWEB24User> userManager, IParkingRepository parkingRepository, IBigliettiRepository bigliettiRepository)
         {
             _autoRepository = autoRepository;
             _userManager = userManager;
             _parkingRepository = parkingRepository;
             _bigliettiRepository = bigliettiRepository;
 
-            var session = httpContextAccessor.HttpContext?.Session ?? throw new NullReferenceException("Missing Session");
-            var key = nameof(ParkId);
-            ParkId = session.GetString(key) ?? Guid.NewGuid().ToString();
-            session.SetString(key, ParkId);
         }
 
         public void OnGet()
@@ -47,37 +42,23 @@ namespace ProgettoAPPWEB24.Pages
                 return Page();
             }
 
-            Parcheggio = await _parkingRepository.Get(id);
-            if (Parcheggio == null)
-            {
-                return NotFound("Parcheggio non trovato.");
-            }
-
             var utente = await _userManager.GetUserAsync(User);
             if (utente == null)
             {
                 return NotFound("Utente non trovato.");
             }
 
-            var lotto = await _parkingRepository.RiservaPosto(Parcheggio.Id);
+            var lotto = await _parkingRepository.RiservaPosto(id);
             if (lotto == -1)
             {
                 return BadRequest("Parcheggio pieno.");
             }
 
-            var auto = await _autoRepository.GetAllAuto();
             var biglietti = await _bigliettiRepository.GetAll().ToListAsync();
 
-            if (auto.Any(a => a.Targa == InputModel.Targa))
+            if (biglietti.Any(b => b.Targa == InputModel.Targa))
             {
-                Biglietto = new Biglietto
-                {
-                    Targa = InputModel.Targa,
-                    ParkId = ParkId,
-                    LottoId = lotto
-                };
-                await _bigliettiRepository.AddBiglietto(Biglietto);
-                return RedirectToPage("_SostaSuccess");
+                return BadRequest("Biglietto già presente.");
             }
             else
             {
@@ -85,7 +66,7 @@ namespace ProgettoAPPWEB24.Pages
                 Biglietto = new Biglietto
                 {
                     Targa = InputModel.Targa,
-                    ParkId = ParkId,
+                    IdParcheggio = id,
                     LottoId = lotto
                 };
                 await _bigliettiRepository.AddBiglietto(Biglietto);
