@@ -80,7 +80,7 @@ async Task AddAdmin()
 
     var usersManager = services.GetRequiredService<UserManager<ProgettoAPPWEB24User>>();
 
-    var user = new ProgettoAPPWEB24User() { UserName = configuration.UserName!, Nome = "Tizio", Cognome = "Caio", Citta = "Biella", Indirizzo = "Via viale", CAP = "13900", Provincia = "Biella", Role = "Admin"};
+    var user = new ProgettoAPPWEB24User() { UserName = configuration.UserName!, Role = "Admin"};
     if((await usersManager.CreateAsync(user, configuration.Password!)).Succeeded)
     {
         await usersManager.AddClaimAsync(user, new(nameof(Role), Role.Admin));

@@ -58,36 +58,6 @@ namespace ProgettoAPPWEB24.Areas.Identity.Pages.Account.Manage
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
 
-            [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "Nome")]
-            public string Nome { get; set; }
-
-            [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "Cognome")]
-            public string Cognome { get; set; }
-
-            [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "Indirizzo")]
-            public string Indirizzo { get; set; }
-
-            [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "Citta")]
-            public string Citta { get; set; }
-
-            [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "CAP")]
-            public string CAP { get; set; }
-
-            [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "Provincia")]
-            public string Provincia { get; set; }
-
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
@@ -106,12 +76,6 @@ namespace ProgettoAPPWEB24.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                Nome = user.Nome,
-                Cognome = user.Cognome,
-                Indirizzo = user.Indirizzo,
-                Citta = user.Citta,
-                CAP = user.CAP,
-                Provincia = user.Provincia,
                 PhoneNumber = phoneNumber,
                 Role = user.Role
             };
@@ -154,30 +118,6 @@ namespace ProgettoAPPWEB24.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            if(Input.Nome != user.Nome)
-            {
-                user.Nome = Input.Nome;
-            }
-            if(Input.Cognome != user.Cognome)
-            {
-                user.Cognome = Input.Cognome;
-            }
-            if(Input.Indirizzo != user.Indirizzo)
-            {
-                user.Indirizzo = Input.Indirizzo;
-            }
-            if(Input.Citta != user.Citta)
-            {
-                user.Citta = Input.Citta;
-            }
-            if(Input.CAP != user.CAP)
-            {
-                user.CAP = Input.CAP;
-            }
-            if(Input.Provincia != user.Provincia)
-            {
-                user.Provincia = Input.Provincia;
-            }
             if(Input.Role != user.Role)
             {
                 user.Role = Input.Role;

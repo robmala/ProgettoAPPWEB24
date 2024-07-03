@@ -73,37 +73,6 @@ namespace ProgettoAPPWEB24.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            // Custom Input
-            [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "Nome")]
-            public string Nome { get; set; }
-
-            [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "Cognome")]
-            public string Cognome { get; set; }
-
-            [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "Indirizzo")]
-            public string Indirizzo { get; set; }
-
-            [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "Citta")]
-            public string Citta { get; set; }
-
-            [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "CAP")]
-            public string CAP { get; set; }
-
-            [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "Provincia")]
-            public string Provincia { get; set; }
-            // Fine Custom Input
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -148,15 +117,6 @@ namespace ProgettoAPPWEB24.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-
-                // Custom Input
-                user.Nome = Input.Nome;
-                user.Cognome = Input.Cognome;
-                user.Indirizzo = Input.Indirizzo;
-                user.Citta = Input.Citta;
-                user.CAP = Input.CAP;
-                user.Provincia = Input.Provincia;
-                // Fine Custom Input
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
