@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using NuGet.Protocol;
 using ProgettoAPPWEB24.Data.Interfaces;
+using System.Runtime.InteropServices.JavaScript;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ProgettoAPPWEB24.Pages
 {
@@ -15,8 +19,7 @@ namespace ProgettoAPPWEB24.Pages
         required public string Targa { get; set; }
         public double Totale { get; set; }
         public TimeSpan Durata { get; set; }
-        public Biglietto Biglietto { get; set; } = default!;
-        //public Parcheggio? Parcheggio { get; set; } = default!;
+        public Biglietto Bigl { get; set; }
 
 
         public CercaBigliettoModel(IBigliettiRepository bigliettiRepository, ICostiRepository costiRepository, IParkingRepository parkingRepository)
@@ -41,41 +44,23 @@ namespace ProgettoAPPWEB24.Pages
                 return NotFound("Auto non trovata");
             }
 
-            //Parcheggio = await _parkingRepository.Get(id);
-            //if (Parcheggio == null)
-            //{
-            //    return NotFound("Parcheggio non trovato.");
-            //}
-
-            Biglietto = await _bigliettiRepository.Get(Targa, id/*Parcheggio.Id*/);
-            if (Biglietto == null)
+            var b = Bigl = await _bigliettiRepository.Get(Targa, id);
+            if (b == null)
             {
                 return NotFound("Biglietto non trovato");
             }
 
-            Durata = DateTime.Now - Biglietto.Ingresso;
-            var costi = await _costiRepository.GetCosto(id/*Parcheggio.Id*/);
+            Durata = DateTime.Now - b.Ingresso;
+            var costi = await _costiRepository.GetCosto(id);
 
             foreach (var c in costi)
             {
-                Totale = Biglietto.Ricarica ? ((c.Ricarica + c.Sosta) * (double)Durata.TotalHours) : (c.Sosta * (double)Durata.TotalHours);
+                Totale = b.Ricarica ? ((c.Ricarica + c.Sosta) * (double)Durata.TotalHours) : (c.Sosta * (double)Durata.TotalHours);
             }
 
             Totale = Math.Round(Totale);
 
             return Page();
-        }
-
-        public async Task<IActionResult> OnPostPaga(Biglietto biglietto, int id)
-        {
-            var b = await _bigliettiRepository.Get(biglietto.Targa, id);
-
-            if (b == null)
-            {
-                return NotFound("Biglietto non trovato.");
-            }
-
-            return RedirectToPage("Pagamento", new { durata = Durata, biglietto = Biglietto, tariffa = Totale });
         }
     }
 }

@@ -1,12 +1,12 @@
-﻿@page "/{id:int}/Cerca"
+﻿@page "{id:int}/Cerca"
 @model ProgettoAPPWEB24.Pages.CercaBigliettoModel
 @{
     var durata = Model.Durata;
 	var tariffa = Model.Totale;
-	var biglietto = Model.Biglietto;
+	var biglietto = Model.Bigl;
 }
 
-<form id="cerca" method="post">
+<form asp-page-handler="Cerca" id="cerca" method="post">
     <h2>Inserire il numero del biglietto</h2>
     <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
     <div class="form-floating mb-3">
@@ -15,12 +15,17 @@
         <span asp-validation-for="Targa" class="text-danger"></span>
     </div>
     <div>
-        <button asp-page-handler="Cerca" type="submit" class="btn btn-primary">Cerca</button>
+        <button class="btn btn-primary">Cerca</button>
     </div>
 </form>
 
-<form id="pagamento" method="post">
-    <p>Durata sosta: @durata.Hours ore </p>
-    <p>Totale: €@tariffa</p>
-    <button asp-page-handler="Paga" asp-route-durata="@durata" asp-route-tariffa="@tariffa" asp-route-biglietto="@biglietto" type="submit" class="btn btn-primary">Paga</button>
-</form>
+@if (biglietto != null)
+{
+    <div>
+        <p>Durata sosta: @durata.Hours ore e @durata.Minutes minuti</p>
+        <p>Totale: €@tariffa.ToString("0.00")</p>
+    </div>
+    <div>
+        <a asp-page="Pagamento" asp-route-durata="@durata" asp-route-tariffa="@tariffa" asp-route-biglietto="@biglietto" asp-route-id="@biglietto?.Id" class="btn btn-primary">Paga</a>
+    </div>
+}

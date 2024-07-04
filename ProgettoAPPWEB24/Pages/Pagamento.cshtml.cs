@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ProgettoAPPWEB24.Areas.Identity.Data;
 using ProgettoAPPWEB24.Data.Interfaces;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace ProgettoAPPWEB24.Pages
 {
@@ -25,12 +27,15 @@ namespace ProgettoAPPWEB24.Pages
             _signinManager = signInManager;
         }
 
-        public async Task<IActionResult> OnGetAsync(TimeSpan durata, Biglietto biglietto, double tariffa)
+        public async Task<IActionResult> OnGetAsync(int id, TimeSpan durata, double tariffa)
         {
+            Durata = durata;
+
+            var biglietto = await _bigliettiRepository.Get(id);
 
             if (biglietto == null)
             {
-                return RedirectToPage("Dati mancanti.");
+                return NotFound("Dati mancanti.");
             }
 
             var user = await _signinManager.UserManager.GetUserAsync(User);
@@ -39,25 +44,22 @@ namespace ProgettoAPPWEB24.Pages
                 return NotFound("Utente non trovato.");
             }
 
-            Durata = durata;
-
             Pagamento = new Pagamento
             {
                 Utente = user.Email!,
-                IdParcheggio = biglietto.IdParcheggio,
+                IdParcheggio = biglietto!.IdParcheggio,
                 Ingresso = biglietto.Ingresso,
                 Uscita = DateTime.Now,
                 Costo = tariffa,
                 Ricarica = biglietto.Ricarica
             };
 
-            await _pagamentoRepository.AddPagamento(Pagamento!);
-
-            await _parkingRepository.LiberaPosto(biglietto!.LottoId);
+            await _parkingRepository.LiberaPosto(biglietto.LottoId);
             await _autoRepository.DeleteAuto(biglietto.Targa);
             await _bigliettiRepository.Delete(biglietto.Id);
+            await _pagamentoRepository.AddPagamento(Pagamento);
 
-            return RedirectToPage("_PagamentoSuccess");
+            return Page();
         }
     }
 }

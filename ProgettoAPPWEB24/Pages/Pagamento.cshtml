@@ -1,4 +1,4 @@
-﻿@page "/{id:int}/Pagamento"
+﻿@page
 @model ProgettoAPPWEB24.Pages.PagamentoModel
 @{
     var Pagamento = Model.Pagamento;
@@ -9,7 +9,7 @@
     <div class="col-md-4">
         <h2>Riepilogo Pagamento</h2>
         <p>Costo: @Pagamento!.Costo</p>
-        <p>Durata Sosta: @Durata</p>
+        <p>Durata Sosta: @Durata.Hours ore e @Durata.Minutes minuti</p>
         @if (Pagamento.Ricarica)
         {
             <p>Ricarica veicolo: si</p>
@@ -18,5 +18,8 @@
         {
             <p>Ricarica veicolo: no</p>
         }
+        <br />
+        La ringraziamo per aver scelto MWBot Parking!
+        <a asp-page="Index" class="btn btn-primary">Torna alla home</a>
     </div>
 </div>
