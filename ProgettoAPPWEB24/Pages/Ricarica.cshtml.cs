@@ -21,7 +21,6 @@ namespace ProgettoAPPWEB24.Pages
         required public Auto InputModel { get; set; }
         [BindProperty]
         public int Livello { get; set; }
-        //public Parcheggio Parcheggio { get; set; } = default!;
         public Biglietto Biglietto { get; set; } = default!;
 
         private static readonly Random rnd = new Random();
@@ -43,7 +42,6 @@ namespace ProgettoAPPWEB24.Pages
                 if (auto.IsRecharging) Count++;
             }
 
-            //Parcheggio = await _parkingRepository.Get(id);
             return Page();
 
         }

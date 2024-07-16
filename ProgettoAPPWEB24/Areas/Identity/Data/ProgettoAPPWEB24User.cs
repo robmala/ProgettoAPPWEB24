@@ -11,6 +11,6 @@ namespace ProgettoAPPWEB24.Areas.Identity.Data;
 // Add profile data for application users by adding properties to the ProgettoAPPWEB24User class
 public class ProgettoAPPWEB24User : IdentityUser
 {
-    public string Role { get; set; } = "User";
+    public string Role { get; set; } = "User"; // Override di IdentityUser per aggiungere il ruolo perchè non riuscivo a far funzionare IdentityRole
 }
 

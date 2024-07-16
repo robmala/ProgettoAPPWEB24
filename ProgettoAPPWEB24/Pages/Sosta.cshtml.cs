@@ -16,7 +16,6 @@ namespace ProgettoAPPWEB24.Pages
         [BindProperty]
         required public Auto InputModel { get; set; }
         public Biglietto Biglietto { get; set; } = default!;
-        //public Parcheggio Parcheggio { get; set; } = default!;
 
         public SostaModel(IAutoRepository autoRepository, UserManager<ProgettoAPPWEB24User> userManager, IParkingRepository parkingRepository, IBigliettiRepository bigliettiRepository)
         {

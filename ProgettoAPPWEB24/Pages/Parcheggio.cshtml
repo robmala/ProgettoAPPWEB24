@@ -20,26 +20,28 @@
     <div>
         <div class="col-12 col-lg-8">
             <div>
-                <center><h3>Costi</h3></center>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Sosta</th>
-                            <th>Ricarica</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var c in costo)
-                        {
+                <center>
+                    <h3>Costi</h3>
+                    <table class="table">
+                        <thead>
                             <tr>
-                                <td>@c.Sosta.ToString("0.00")</td>
-                                    <td>@c.Ricarica.ToString("0.00")</td>
+                                <th width="25%">Sosta</th>
+                                <th width="25%">Ricarica</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-                <h10>I costi sono espressi in €/h per la sosta e €/KWh per la ricarica.</h10><br />
-                <h10>Il costo totale viene calcolato sommando i prezzi di sosta e ricarica.</h10><br />
+                        </thead>
+                        <tbody>
+                            @foreach (var c in costo)
+                            {
+                                <tr>
+                                    <td width="25%">@c.Sosta.ToString("0.00")</td>
+                                    <td width="25%">@c.Ricarica.ToString("0.00")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <p>I costi sono espressi in €/h per la sosta e €/KWh per la ricarica.</p>
+                    <p>Il costo totale viene calcolato sommando i prezzi di sosta e ricarica.</p>
+                </center>
             </div>
             <br />
             <br />

@@ -24,6 +24,9 @@ body {
 table,
 td,
 th {
+    width: 50%;
     border: 0.5px solid gray;
     align-content: center;
+    text-align: center;
+    column-fill: balance;
 }
